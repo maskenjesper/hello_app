@@ -30,7 +30,8 @@ if config_env() == :prod do
 
   config :hello_app, HelloApp.Repo,
     database: database_path,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5"),
+    ssl: true
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -50,16 +51,20 @@ if config_env() == :prod do
   config :hello_app, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :hello_app, HelloAppWeb.Endpoint,
-    url: [host: host, port: 443, scheme: "https"],
-    http: [
-      # Enable IPv6 and bind on all interfaces.
-      # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
-      # See the documentation on https://hexdocs.pm/bandit/Bandit.html#t:options/0
-      # for details about using IPv6 vs IPv4 and loopback vs public addresses.
-      ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: port
-    ],
-    secret_key_base: secret_key_base
+    # url: [host: host, port: 443, scheme: "https"],
+    # http: [
+    #   # Enable IPv6 and bind on all interfaces.
+    #   # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
+    #   # See the documentation on https://hexdocs.pm/bandit/Bandit.html#t:options/0
+    #   # for details about using IPv6 vs IPv4 and loopback vs public addresses.
+    #   ip: {0, 0, 0, 0, 0, 0, 0, 0},
+    #   port: port
+    # ],
+    secret_key_base: secret_key_base,
+    server: true,
+    http: [port: {:system, "PORT"}],
+    url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443]
+    
 
   # ## SSL Support
   #
