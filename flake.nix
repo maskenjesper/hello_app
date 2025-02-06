@@ -21,6 +21,7 @@
         default = mkShell {
           buildInputs = [
             elixir
+            erlang
             sqlite
             inotify-tools
           ];
